@@ -93,7 +93,7 @@ export default function HomePage() {
                         style={{
                           display: "block",
                           maxWidth: "300px",
-                          overflow: "clip",
+                          wordWrap: "break-word"
                         }}
                       >
                         {token?.accessToken}
@@ -107,7 +107,7 @@ export default function HomePage() {
                         style={{
                           display: "block",
                           maxWidth: "300px",
-                          overflow: "clip",
+                          wordWrap: "break-word"
                         }}
                       >
                         {token?.idToken}
