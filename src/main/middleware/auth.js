@@ -99,35 +99,39 @@ export const handleExpiredLogin = function (navigate) {
   });
 };
 
-export const handleSignIn = function (callback, force) {
-  if (typeof sessionStorage !== "undefined" && force != true) {
-    if (sessionStorage.getItem("token")) {
-      try {
-        let token = JSON.parse(sessionStorage.getItem("token"));
-        callback(token);
-      } catch (e) {
-        callback(null);
+export const handleSignIn = function () {
+  return new Promise((resolve, reject) => {
+    // have we already signed in!
+    if (typeof sessionStorage !== "undefined") {
+      var json = sessionStorage.getItem("token");
+      if (json != null) {
+        var dt = sessionStorage.getItem("_last_validated");
+        if (dt != null) {
+          var difference = (new Date(dt) - new Date()) / 1000;
+          if (Math.abs(difference) <= 30) {
+            resolve(JSON.parse(json));
+            return;
+          }
+        }
       }
-      return;
     }
-  }
-  axios({
-    method: "get",
-    url: "/whoami",
-  })
-    .then(function (response) {
-      if (typeof sessionStorage !== "undefined") {
-        sessionStorage.setItem("token", JSON.stringify(response.data));
-      }
-      if (callback) {
-        callback(response.data);
-      }
+
+    axios({
+      method: "get",
+      url: "/whoami",
     })
-    .catch(function (error) {
-      if (callback) {
-        callback(null);
-      }
-    });
+      .then(function (response) {
+        if (typeof sessionStorage !== "undefined") {
+          sessionStorage.setItem("token", JSON.stringify(response.data));
+          resolve(response.data);
+        } else {
+          resolve(response.data);
+        }
+      })
+      .catch(function (error) {
+        reject();
+      });
+  });
 };
 
 export const logoutUser = function (callback) {

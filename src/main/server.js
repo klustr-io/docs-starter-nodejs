@@ -10,6 +10,7 @@ import App from "./app";
 import createEmotionCache from "./cache";
 import Passport from "./passport";
 import lightTheme from "./themes/light";
+import uuid4 from "uuid4";
 
 const path = require("path");
 
@@ -50,6 +51,7 @@ function handleRender(req, res) {
   const { extractCriticalToChunks, constructStyleTagsFromChunks } =
     createEmotionServer(cache);
 
+
   // Render the component to a string.
   const html = ReactDOM.renderToString(
     <CacheProvider value={cache}>
@@ -67,6 +69,21 @@ function handleRender(req, res) {
   // Grab the CSS from emotion
   const emotionChunks = extractCriticalToChunks(html);
   const emotionCss = constructStyleTagsFromChunks(emotionChunks);
+
+  if (req.path == '/' && req.user == null) {
+    res.redirect('/login');
+    return;
+  }
+  if (req.query.logout) {
+    req.logout(function (err) {
+      if (err) {
+        return next(err);
+      }
+      res.redirect('/login');
+    });
+    return;
+  }
+
 
   // Send the rendered page back to the client.
   res.status(staticContext.statusCode || 200);
@@ -129,18 +146,17 @@ app.get("*", handleRender);
  */
 app.use(function (err, req, res, next) {
   if (err) {
-    console.log('==== Error ====');
-    console.log(err);
-    console.log('----------');
-    console.log(req.path, "PATH");
-    console.log('----------');
-    req.logout({}, () => {
-      if (req.originalUrl == "/") {
-        next();
-      } else {
-        res.redirect("/");
-      }
-    });
+    // handle invalid sign in
+    if (err && err.name === "TokenExpiredError") {
+      req.logout({}, () => {
+        res.redirect("/?s=" + uuid4());
+      });
+      // next();
+    } else {
+      console.log(err, "err");
+      res.redirect("/error?s=" + uuid4());
+      next(err);
+    }
   } else {
     next();
   }

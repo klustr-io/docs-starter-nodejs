@@ -12,7 +12,7 @@ const ProtectedRoute = ({ element, user, path }) => {
 
   React.useEffect(() => {
     setIsLoading(true);
-    handleSignIn((user) => {
+    handleSignIn().then((user) => {
       setHasPermission(user != null);
       if (user == null) {
         window.location.href = `/login?redirect=` + path;
@@ -32,7 +32,8 @@ export default function App({ user }) {
   return (
     <Auth>
       <Routes>
-        {routes.private.map(({ path, component: C, key: key }) => {
+        {/* Signed in user routes come last */}
+        { routes.private.map(({ path, component: C, key: key }) => {
           return (
           <Route
             exact
@@ -42,7 +43,8 @@ export default function App({ user }) {
             element={<ProtectedRoute user={user} path={path} element={<C />} />}
           ></Route>
         )})}
-        {routes.public.map(({ path, component: C, key: key }) => {
+        {/* Anon must come first to enable overwrite later */}
+        { routes.public.map(({ path, component: C, key: key }) => {
           return (
           <Route exact strict key={key} path={path} element={<C />} />
         )})}

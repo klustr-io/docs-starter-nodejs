@@ -7,16 +7,27 @@ import createEmotionCache from "./cache";
 import { CssBaseline } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import lightTheme from "./themes/light";
+import { handleSignIn } from "./middleware/auth";
 
 const cache = createEmotionCache();
 
 function Main() {
+  const [user, setUser] = React.useState();
+
+  React.useEffect(() => {
+    handleSignIn()
+      .then((user) => {
+        setUser(user);
+      })
+      .catch(() => {});
+  }, []);
+
   return (
     <BrowserRouter>
       <CacheProvider value={cache}>
         <ThemeProvider theme={lightTheme}>
           <CssBaseline />
-          <App />
+          <App user={user} />
         </ThemeProvider>
       </CacheProvider>
     </BrowserRouter>

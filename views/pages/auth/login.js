@@ -121,6 +121,33 @@ export default function LoginPage() {
                       <Typography>Sign In</Typography>
                     </Button>
 
+                    <Button
+                      elevation={0}
+                      href={`/auth/oidc?redirect=` + redirect + '&account=inventor'}
+                      variant="outlined"
+                      color="secondary"
+                    >
+                      <Typography>Sign On As Inventor</Typography>
+                    </Button>
+
+                    <Button
+                      elevation={0}
+                      href={`/auth/oidc?redirect=` + redirect + '&experiment=5c1b487c47cf'}
+                      variant="outlined"
+                      color="secondary"
+                    >
+                      <Typography>Sign On w/ Nike Experiment</Typography>
+                    </Button>
+
+                    <Button
+                      elevation={0}
+                      href={`/auth/oidc?redirect=` + redirect + '&experiment=136ccf0bf95f'}
+                      variant="outlined"
+                      color="secondary"
+                    >
+                      <Typography>Sign On w/ Location Experiment</Typography>
+                    </Button>
+
                   </Stack>
                 </Container>
               </Box>
