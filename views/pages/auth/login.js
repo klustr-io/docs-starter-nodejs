@@ -132,21 +132,13 @@ export default function LoginPage() {
 
                     <Button
                       elevation={0}
-                      href={`/auth/oidc?redirect=` + redirect + '&experiment=5c1b487c47cf'}
+                      href={`/auth/oidc?redirect=` + redirect + '&experiment=a37478de53c2'}
                       variant="outlined"
                       color="secondary"
                     >
                       <Typography>Sign On w/ Nike Experiment</Typography>
                     </Button>
 
-                    <Button
-                      elevation={0}
-                      href={`/auth/oidc?redirect=` + redirect + '&experiment=136ccf0bf95f'}
-                      variant="outlined"
-                      color="secondary"
-                    >
-                      <Typography>Sign On w/ Location Experiment</Typography>
-                    </Button>
 
                   </Stack>
                 </Container>

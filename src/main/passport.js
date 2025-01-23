@@ -71,13 +71,12 @@ export default function Passport(app) {
 
     let scopes = req.query.scopes || process.env.OIDC_SCOPES || "profile openid";
 
-    let body = Object.assign({}, {
+    let requestBody = Object.assign({}, {
       scope: scopes,
       return_to: process.env.OIDC_RETURN_URL,
     }, req.query);
-    console.log(body, 'oidc');
 
-    const authenticator = passport.authenticate("oidc", body);
+    const authenticator = passport.authenticate("oidc", requestBody);
     authenticator(req, res, next);
   });
 
@@ -110,7 +109,6 @@ export default function Passport(app) {
     passport.use(
       "oidc",
       new Strategy({ client }, (tokenSet, userinfo, done) => {
-        console.log(tokenSet);
         var user = {
           id: userinfo.sub,
           displayName: userinfo.family_name + " " + userinfo.given_name,
@@ -128,8 +126,7 @@ export default function Passport(app) {
           experiments: tokenSet.experiments,
           idToken: tokenSet.id_token,
           expires_at: tokenSet.expires_at,
-          scopes: tokenSet.scope.split(' '),
-          apikey: process.env.API_KEY
+          scopes: tokenSet.scope.split(' ')
         };
         return done(null, user);
       })

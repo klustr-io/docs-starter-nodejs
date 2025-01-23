@@ -91,11 +91,11 @@ export default function HomePage() {
                   </TableRow>
                   <TableRow>
                     <TableCell>Scopes</TableCell>
-                    <TableCell><Grid gap={2} direction={"row"}>{token?.scopes?.map(x => <Grid item key={x}>{x}</Grid>)}</Grid></TableCell>
+                    <TableCell><Stack gap={1} direction={"column"}>{token?.scopes?.map(x => <Typography variant="body2" key={x}>{x}</Typography>)}</Stack></TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Experiments</TableCell>
-                    <TableCell><Grid gap={2} direction={"row"}>{token?.experiments?.map(x => <Grid item key={x}>{x}</Grid>)}</Grid></TableCell>
+                    <TableCell><Stack gap={1} direction={"column"}>{token?.experiments?.map(x => <Typography variant="body2"  key={x}>{x}</Typography>)}</Stack></TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Groups</TableCell>
