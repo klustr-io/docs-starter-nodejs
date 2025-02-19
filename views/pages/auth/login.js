@@ -34,7 +34,7 @@ export default function LoginPage() {
   const theme = useTheme();
   const useQuery = () => new URLSearchParams(useLocation().search);
   const query = useQuery();
-  var redirect = query.get("redirect");
+  var redirect = query.get("redirect") || "http://localhost:5000";
 
   return (
     <Grid
@@ -115,7 +115,7 @@ export default function LoginPage() {
                   <Stack spacing={1} maxWidth={"200px"}>
                     <Button
                       elevation={0}
-                      href={`/auth/oidc?redirect=` + redirect}
+                      href={`/auth/oidc`}
                       variant="contained"
                     >
                       <Typography>Sign In</Typography>
@@ -123,7 +123,7 @@ export default function LoginPage() {
 
                     <Button
                       elevation={0}
-                      href={`/auth/oidc?redirect=` + redirect + '&account=inventor'}
+                      href={`/auth/oidc?account=inventor`}
                       variant="outlined"
                       color="secondary"
                     >
@@ -132,12 +132,22 @@ export default function LoginPage() {
 
                     <Button
                       elevation={0}
-                      href={`/auth/oidc?redirect=` + redirect + '&experiment=a37478de53c2'}
+                      href={`/auth/oidc?experiment=a297d8fc958c`}
                       variant="outlined"
                       color="secondary"
                     >
                       <Typography>Sign On w/ Nike Experiment</Typography>
                     </Button>
+
+                    <Button
+                      elevation={0}
+                      href={`/auth/oidc?experiment=6854214166db`}
+                      variant="outlined"
+                      color="secondary"
+                    >
+                      <Typography>Sign On w/ Lawson Experiment</Typography>
+                    </Button>
+                    
 
 
                   </Stack>
