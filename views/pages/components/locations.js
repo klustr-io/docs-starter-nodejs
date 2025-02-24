@@ -32,7 +32,7 @@ const recordLocation = (callback) => {
     }
     axios
       .post(
-        "https://gateway.dev.klustr.io/events/self/locations",
+        "https://gateway.dev.klustr.io/events/me/locations",
         {
           device_id: window.navigator.userAgent,
           lat: position.coords.latitude,
@@ -64,7 +64,7 @@ const getMostRecentLocation = function (json) {
     throw "No token valid";
   }
 
-  return axios.get("https://gateway.dev.klustr.io/events/self/locations", {
+  return axios.get("https://gateway.dev.klustr.io/events/me/locations", {
     headers: {
       Authorization: "Bearer " + accessToken,
       "X-API-Key": getApiKey(),
@@ -78,7 +78,7 @@ const deleteLocations = function (json) {
     throw "No token valid";
   }
 
-  return axios.delete("https://gateway.dev.klustr.io/events/self/locations", {
+  return axios.delete("https://gateway.dev.klustr.io/events/me/locations", {
     headers: {
       Authorization: "Bearer " + accessToken,
       "X-API-Key": getApiKey(),
