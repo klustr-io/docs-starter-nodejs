@@ -5,9 +5,9 @@ import App from "./app";
 import createEmotionCache from "./cache";
 
 import { CssBaseline } from "@mui/material";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 import lightTheme from "./themes/light";
-import { handleSignIn } from "./middleware/auth";
+import { handleExpiredLogin, handleSignIn } from "./middleware/auth";
 
 const cache = createEmotionCache();
 

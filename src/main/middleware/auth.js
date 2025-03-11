@@ -20,7 +20,6 @@ export const getAccessToken = function () {
       return token.accessToken;
     }
   }
-  console.error("No access token defined.");
   return null;
 };
 
@@ -31,7 +30,6 @@ export const getApiKey = function () {
       return token.apikey;
     }
   }
-  console.error("No access token defined.");
   return null;
 };
 
@@ -42,7 +40,6 @@ export const getUser = function () {
       return token;
     }
   }
-  console.error("No access token defined.");
   return null;
 };
 
@@ -53,7 +50,6 @@ export const getIdToken = function () {
       return token.idToken;
     }
   }
-  console.error("No access token defined.");
   return null;
 };
 
@@ -64,7 +60,6 @@ export const getToken = function () {
       return token;
     }
   }
-  console.error("No access token defined.");
   return null;
 };
 
@@ -78,7 +73,26 @@ export const getAccessTokenExpiry = function () {
   return null;
 };
 
-export const handleExpiredLogin = function (navigate) {
+export const getUserInfo = function () {
+  let accessToken = getAccessToken();
+  if (accessToken.length <= 0) {
+    throw "No token valid";
+  }
+  //https://hydra.dev.klustr.io/.well-known/openid-configuration
+  return axios.get("https://secure.dev.klustr.io/hydra/userinfo", {
+    headers: {
+      Authorization: "Bearer " + accessToken,
+    },
+  });
+};
+
+export const exit = function(callback) {
+  logoutUser(() => {
+    callback();
+  });
+}
+
+export const handleExpiredLogin = function (callback) {
   var now = Math.floor(new Date().valueOf() / 1000);
   var expry = getAccessTokenExpiry();
 
@@ -89,14 +103,20 @@ export const handleExpiredLogin = function (navigate) {
     expired = true;
   }
 
-  if (!expired) {
-    _.delay(handleExpiredLogin, 5000, navigate);
-    return;
-  }
+  // check token is still valid by fetching the userinfo endpoint
 
-  logoutUser(() => {
-    navigate("/login?redirect=" + encodeURIComponent(window.location.pathname));
-  });
+  if (!expired) {
+
+    getUserInfo().then(({ data: info }) => {
+      // all good
+    }).catch((e) => {
+      exit(callback);
+    })
+
+    _.delay(handleExpiredLogin, 60 * 1000, callback);
+  } else {
+    exit(callback);
+  }
 };
 
 export const handleSignIn = function () {

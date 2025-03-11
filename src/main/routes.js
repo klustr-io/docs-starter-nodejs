@@ -8,6 +8,11 @@ const routes = {
       component: LoginPage,
       key: "login"
     },
+    {
+      path: "/error",
+      component: LoginPage,
+      key: "error"
+    },
   ],
   private: [
     {

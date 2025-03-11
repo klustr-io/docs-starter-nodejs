@@ -2,6 +2,7 @@ import { useTheme } from "@mui/material/styles";
 import React from "react";
 
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -35,6 +36,10 @@ export default function LoginPage() {
   const useQuery = () => new URLSearchParams(useLocation().search);
   const query = useQuery();
   var redirect = query.get("redirect") || "http://localhost:5000";
+
+  var error_name = query.get("name");
+  var error_code = query.get("code");
+  var error_message = query.get("message");
 
   return (
     <Grid
@@ -110,9 +115,20 @@ export default function LoginPage() {
               <Typography variant="body">
                 Demo application to help you understandard klustr.io
               </Typography>
-              <Box noValidate sx={{ mt: 3 }}>
+              <Box noValidate sx={{ m: "0px auto", textAlign: "center" }}>
                 <Container sx={{ mt: "1em", mb: "1em" }}>
-                  <Stack spacing={1} maxWidth={"200px"}>
+                  <Stack spacing={1} alignContent={"center"} alignItems={"center"}>
+
+                  {error_message && (
+                    <Alert icon={false} color="error" sx={{ maxWidth: "350px"}}>
+                      <Stack>
+                        <Typography variant="h5">Error</Typography>
+                        <Typography variant="body2">{error_message}</Typography>
+                      
+                      </Stack>
+                    </Alert>
+                  )}
+
                     <Button
                       elevation={0}
                       href={`/auth/oidc`}
@@ -123,11 +139,11 @@ export default function LoginPage() {
 
                     <Button
                       elevation={0}
-                      href={`/auth/oidc?account=inventor`}
+                      href={`/auth/oidc?agreements=64857d4c49f8`}
                       variant="outlined"
                       color="secondary"
                     >
-                      <Typography>Sign On As Inventor</Typography>
+                      <Typography>Sign In With Agreement</Typography>
                     </Button>
 
                     <Button

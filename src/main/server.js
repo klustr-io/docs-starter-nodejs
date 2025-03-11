@@ -146,6 +146,11 @@ app.get("*", handleRender);
  */
 app.use(function (err, req, res, next) {
   if (err) {
+    if (err.name) {
+      console.log(err.name, 'ERROR NAME');
+      console.log(err.message, 'ERROR MESSAGE');
+      console.log(err.error, 'ERROR CODE');
+    }
     // handle invalid sign in
     if (err && err.name === "TokenExpiredError") {
       req.logout({}, () => {
@@ -153,8 +158,10 @@ app.use(function (err, req, res, next) {
       });
       // next();
     } else {
-      console.log(err, "err");
-      res.redirect("/error?s=" + uuid4());
+      res.redirect("/error?s=" + uuid4() + 
+      '&name=' + encodeURIComponent(err.name) + 
+      '&code=' + encodeURIComponent(err.error) + 
+      '&message=' + encodeURIComponent(err.message));
       next(err);
     }
   } else {

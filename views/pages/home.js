@@ -23,13 +23,20 @@ import {
   getAccessToken,
   getApiKey,
   getToken,
+  handleExpiredLogin,
   logoutUser,
 } from "../../src/main/middleware/auth";
 import axios from "axios";
 import LocationsWidget from "./components/locations";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
   const [token, setToken] = React.useState({});
+
+  const navigate = useNavigate();
+  handleExpiredLogin(() => {
+    navigate("/login");
+  });
 
   React.useEffect(() => {
     setToken(getToken());
@@ -51,23 +58,32 @@ export default function HomePage() {
         spacing={2}
         width={"100%"}
       >
-        <Stack gap={4} sx={{ width: "100%"}} alignItems={"center"} alignContent={"center"}>
-          <Card >
+        <Stack
+          gap={4}
+          sx={{ width: "100%" }}
+          alignItems={"center"}
+          alignContent={"center"}
+        >
+          <Card>
             <CardContent style={{ textAlign: "center" }}>
               <Stack gap={2}>
-              <Typography variant="h3">Signed In</Typography>
-              <Typography variant="body">
-                You've successfully signed into this application.
-              </Typography>
-              <Box>
-              <Button variant="contained" color="primary"           onClick={() => {
-            window.location.href =
-              "https://secure.dev.klustr.io/kratos/self-service/settings/browser?&prompt=profile&return_to=" +
-              encodeURIComponent("http://localhost:5000");
-          }}>
-                Manage Your Account
-              </Button>
-              </Box>
+                <Typography variant="h3">Signed In</Typography>
+                <Typography variant="body">
+                  You've successfully signed into this application.
+                </Typography>
+                <Box>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    onClick={() => {
+                      window.location.href =
+                        "https://secure.dev.klustr.io/kratos/self-service/settings/browser?&prompt=profile&return_to=" +
+                        encodeURIComponent("http://localhost:5000");
+                    }}
+                  >
+                    Manage Your Account
+                  </Button>
+                </Box>
               </Stack>
               <Table sx={{ maxWidth: 650 }} aria-label="simple table">
                 <TableHead>
@@ -91,11 +107,27 @@ export default function HomePage() {
                   </TableRow>
                   <TableRow>
                     <TableCell>Scopes</TableCell>
-                    <TableCell><Stack gap={1} direction={"column"}>{token?.scopes?.map(x => <Typography variant="body2" key={x}>{x}</Typography>)}</Stack></TableCell>
+                    <TableCell>
+                      <Stack gap={1} direction={"column"}>
+                        {token?.scopes?.map((x) => (
+                          <Typography variant="body2" key={x}>
+                            {x}
+                          </Typography>
+                        ))}
+                      </Stack>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Experiments</TableCell>
-                    <TableCell><Stack gap={1} direction={"column"}>{token?.experiments?.map(x => <Typography variant="body2"  key={x}>{x}</Typography>)}</Stack></TableCell>
+                    <TableCell>
+                      <Stack gap={1} direction={"column"}>
+                        {token?.experiments?.map((x) => (
+                          <Typography variant="body2" key={x}>
+                            {x}
+                          </Typography>
+                        ))}
+                      </Stack>
+                    </TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>Groups</TableCell>
@@ -122,7 +154,6 @@ export default function HomePage() {
                     <TableCell>{token?.source?.project_id}</TableCell>
                   </TableRow>
 
-                  
                   <TableRow>
                     <TableCell>Expires</TableCell>
                     <TableCell>{token?.expires_at}</TableCell>
@@ -134,7 +165,7 @@ export default function HomePage() {
                         style={{
                           display: "block",
                           maxWidth: "300px",
-                          wordWrap: "break-word"
+                          wordWrap: "break-word",
                         }}
                       >
                         {token?.accessToken}
@@ -148,7 +179,7 @@ export default function HomePage() {
                         style={{
                           display: "block",
                           maxWidth: "300px",
-                          wordWrap: "break-word"
+                          wordWrap: "break-word",
                         }}
                       >
                         {token?.idToken}

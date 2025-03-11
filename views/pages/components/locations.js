@@ -51,6 +51,8 @@ const recordLocation = (callback) => {
       .catch((e) => {
         if (e?.response?.status == 401) {
           alert("Not authenticated, logout and login.");
+        } else if (e?.response?.status == 403) {
+          alert("403 api response, consent not granted.");
         } else {
           alert(e.message);
         }
@@ -69,6 +71,14 @@ const getMostRecentLocation = function (json) {
       Authorization: "Bearer " + accessToken,
       "X-API-Key": getApiKey(),
     },
+  }).catch((e) => {
+    if (e?.response?.status == 401) {
+      alert("Not authenticated, logout and login.");
+    } else if (e?.response?.status == 403) {
+      alert("403 api response, consent not granted.");
+    } else {
+      alert(e.message);
+    }
   });
 };
 
@@ -83,6 +93,14 @@ const deleteLocations = function (json) {
       Authorization: "Bearer " + accessToken,
       "X-API-Key": getApiKey(),
     },
+  }).catch((e) => {
+    if (e?.response?.status == 401) {
+      alert("Not authenticated, logout and login.");
+    } else if (e?.response?.status == 403) {
+      alert("403 api response, consent not granted.");
+    } else {
+      alert(e.message);
+    }
   });
 };
 
@@ -125,7 +143,7 @@ export default function LocationsWidget() {
           <TableBody>
             {data?.docs?.map((doc) => {
               return (
-                <TableRow>
+                <TableRow key={doc.id}>
                   <TableCell>{doc.id}</TableCell>
                   <TableCell>{doc.lat}</TableCell>
                   <TableCell>{doc.lng}</TableCell>
@@ -148,43 +166,56 @@ export default function LocationsWidget() {
         alignItems="center"
         sx={{ padding: "1em", marginBottom: "2em" }}
       >
-        {token?.scopes?.indexOf("location.places.write") >= 0 && (
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              recordLocation(() => {
-                handleLoad();
-              });
-            }}
-          >
-            Capture Location
-          </Button>
+        {token?.scopes?.indexOf("location.places.write")  < 0 && (
+          <Typography variant="small">
+            You do not have consent for 'location.places.write' this call should
+            fail.
+          </Typography>
         )}
-
-        {token?.scopes?.indexOf("location.places.read") >= 0 && (
-          <Button
-            variant="outlined"
-            color="success"
-            onClick={() => {
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => {
+            recordLocation(() => {
               handleLoad();
-            }}
-          >
-            Get User Locations
-          </Button>
+            });
+          }}
+        >
+          Capture Location
+        </Button>
+
+        {token?.scopes?.indexOf("location.places.read")  < 0 && (
+          <Typography variant="small">
+            You do not have consent for 'location.places.read' this call should
+            fail.
+          </Typography>
         )}
 
-        {token?.scopes?.indexOf("location.places.write") >= 0 && (
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => {
-              handleDelete();
-            }}
-          >
-            Delete Locations
-          </Button>
+        <Button
+          variant="outlined"
+          color="success"
+          onClick={() => {
+            handleLoad();
+          }}
+        >
+          Get User Locations
+        </Button>
+
+        {token?.scopes?.indexOf("location.places.write") < 0 && (
+          <Typography variant="small">
+            You do not have consent for 'location.places.write' this call should
+            fail.
+          </Typography>
         )}
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={() => {
+            handleDelete();
+          }}
+        >
+          Delete Locations
+        </Button>
       </Stack>
     </Stack>
   );
