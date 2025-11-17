@@ -14,9 +14,6 @@ const ProtectedRoute = ({ element, user, path }) => {
     setIsLoading(true);
     handleSignIn().then((user) => {
       setHasPermission(user != null);
-      if (user == null) {
-        window.location.href = `/login?redirect=` + path;
-      }
       setIsLoading(false);
     });
   }, []);

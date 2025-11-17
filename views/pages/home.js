@@ -35,7 +35,7 @@ export default function HomePage() {
 
   const navigate = useNavigate();
   handleExpiredLogin(() => {
-    navigate("/login");
+    // navigate("/login");
   });
 
   React.useEffect(() => {
@@ -139,7 +139,21 @@ export default function HomePage() {
                   </TableRow>
                   <TableRow>
                     <TableCell>Roles</TableCell>
-                    <TableCell>{token?.roles}</TableCell>
+                    <TableCell><ul>{token?.roles?.map((r) => {
+                      return <li key={r}>{r}</li>
+                    })}</ul></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Projects</TableCell>
+                    <TableCell><ul>{token?.projects?.map((r) => {
+                      return <li key={r}>{r}</li>
+                    })}</ul></TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell>Orgs</TableCell>
+                    <TableCell><ul>{token?.orgs?.map((r) => {
+                      return <li key={r}>{r}</li>
+                    })}</ul></TableCell>
                   </TableRow>
                   <TableRow>
                     <TableCell>App ID</TableCell>

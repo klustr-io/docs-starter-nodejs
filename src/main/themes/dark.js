@@ -32,28 +32,23 @@ const darkTheme = createTheme({
     },
     h2: {
       fontSize: "3em",
-      fontWeight: "400",
-      color: colors.font.hero,
+      fontWeight: "400"
     },
     h3: {
       fontSize: "2em",
-      fontWeight: "500",
-      color: colors.font.hero,
+      fontWeight: "500"
     },
     h4: {
       fontSize: "1.5em",
-      fontWeight: "400",
-      color: colors.font.hero,
+      fontWeight: "400"
     },
     h5: {
       fontSize: "1.3em",
-      fontWeight: "300",
-      color: colors.font.hero,
+      fontWeight: "300"
     },
     h6: {
       fontSize: "1.1em",
-      fontWeight: "500",
-      color: colors.font.hero,
+      fontWeight: "500"
     },
     "form-label": {
       fontSize: "0.9em",
